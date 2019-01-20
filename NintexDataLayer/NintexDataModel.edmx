@@ -1,0 +1,368 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="NintexUrlDbModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Client">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="LoginId" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="PasswordHash" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ClientURL">
+          <Key>
+            <PropertyRef Name="ClientId" />
+            <PropertyRef Name="UrlId" />
+          </Key>
+          <Property Name="ClientId" Type="int" Nullable="false" />
+          <Property Name="UrlId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Package">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="Title" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Type" Type="int" Nullable="false" />
+          <Property Name="Charges" Type="smallmoney" Nullable="false" />
+          <Property Name="Active" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Subscriptions">
+          <Key>
+            <PropertyRef Name="ClientId" />
+            <PropertyRef Name="PackageId" />
+          </Key>
+          <Property Name="ClientId" Type="int" Nullable="false" />
+          <Property Name="PackageId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="URL">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="LongURL" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="ShortURL" Type="varchar" MaxLength="50" />
+          <Property Name="ClientCount" Type="int" Nullable="false" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'NintexUrlDb.dbo.VWClientPackages' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="VWClientPackages">
+          <Key>
+            <PropertyRef Name="ClientId" />
+            <PropertyRef Name="Name" />
+            <PropertyRef Name="LoginId" />
+            <PropertyRef Name="PackageTitle" />
+            <PropertyRef Name="PackageType" />
+          </Key>
+          <Property Name="ClientId" Type="int" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="LoginId" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="PackageTitle" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="PackageType" Type="int" Nullable="false" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'NintexUrlDb.dbo.VWClientURLs' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="VWClientURLs">
+          <Key>
+            <PropertyRef Name="Name" />
+            <PropertyRef Name="ClientId" />
+            <PropertyRef Name="LongURL" />
+            <PropertyRef Name="LoginId" />
+            <PropertyRef Name="UrlId" />
+            <PropertyRef Name="ClientCount" />
+          </Key>
+          <Property Name="Name" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="ClientId" Type="int" Nullable="false" />
+          <Property Name="LongURL" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="ShortURL" Type="varchar" MaxLength="50" />
+          <Property Name="LoginId" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="UrlId" Type="int" Nullable="false" />
+          <Property Name="ClientCount" Type="int" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_ClientPackages_Client">
+          <End Role="Client" Type="Self.Client" Multiplicity="1" />
+          <End Role="Subscriptions" Type="Self.Subscriptions" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Client">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Subscriptions">
+              <PropertyRef Name="ClientId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ClientPackages_Package">
+          <End Role="Package" Type="Self.Package" Multiplicity="1" />
+          <End Role="Subscriptions" Type="Self.Subscriptions" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Package">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Subscriptions">
+              <PropertyRef Name="PackageId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ClientURL_Client">
+          <End Role="Client" Type="Self.Client" Multiplicity="1" />
+          <End Role="ClientURL" Type="Self.ClientURL" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Client">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ClientURL">
+              <PropertyRef Name="ClientId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ClientURL_URL">
+          <End Role="URL" Type="Self.URL" Multiplicity="1" />
+          <End Role="ClientURL" Type="Self.ClientURL" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="URL">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ClientURL">
+              <PropertyRef Name="UrlId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="NintexUrlDbModelStoreContainer">
+          <EntitySet Name="Client" EntityType="Self.Client" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ClientURL" EntityType="Self.ClientURL" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Package" EntityType="Self.Package" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Subscriptions" EntityType="Self.Subscriptions" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="URL" EntityType="Self.URL" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="VWClientPackages" EntityType="Self.VWClientPackages" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [VWClientPackages].[ClientId] AS [ClientId], 
+    [VWClientPackages].[Name] AS [Name], 
+    [VWClientPackages].[LoginId] AS [LoginId], 
+    [VWClientPackages].[PackageTitle] AS [PackageTitle], 
+    [VWClientPackages].[PackageType] AS [PackageType]
+    FROM [dbo].[VWClientPackages] AS [VWClientPackages]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="VWClientURLs" EntityType="Self.VWClientURLs" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [VWClientURLs].[Name] AS [Name], 
+    [VWClientURLs].[ClientId] AS [ClientId], 
+    [VWClientURLs].[LongURL] AS [LongURL], 
+    [VWClientURLs].[ShortURL] AS [ShortURL], 
+    [VWClientURLs].[LoginId] AS [LoginId], 
+    [VWClientURLs].[UrlId] AS [UrlId], 
+    [VWClientURLs].[ClientCount] AS [ClientCount]
+    FROM [dbo].[VWClientURLs] AS [VWClientURLs]</DefiningQuery>
+          </EntitySet>
+          <AssociationSet Name="FK_ClientPackages_Client" Association="Self.FK_ClientPackages_Client">
+            <End Role="Client" EntitySet="Client" />
+            <End Role="Subscriptions" EntitySet="Subscriptions" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ClientPackages_Package" Association="Self.FK_ClientPackages_Package">
+            <End Role="Package" EntitySet="Package" />
+            <End Role="Subscriptions" EntitySet="Subscriptions" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ClientURL_Client" Association="Self.FK_ClientURL_Client">
+            <End Role="Client" EntitySet="Client" />
+            <End Role="ClientURL" EntitySet="ClientURL" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ClientURL_URL" Association="Self.FK_ClientURL_URL">
+            <End Role="URL" EntitySet="URL" />
+            <End Role="ClientURL" EntitySet="ClientURL" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="NintexUrlDbModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Client">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="LoginId" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="PasswordHash" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="URLs" Relationship="Self.ClientURL" FromRole="Client" ToRole="URL" />
+          <NavigationProperty Name="Packages" Relationship="Self.Subscriptions" FromRole="Client" ToRole="Package" />
+        </EntityType>
+        <EntityType Name="Package">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="Title" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Type" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Clients" Relationship="Self.Subscriptions" FromRole="Package" ToRole="Client" />
+          <Property Name="Charges" Type="Decimal" Nullable="false" Precision="10" Scale="4" />
+          <Property Name="Active" Type="Boolean" Nullable="false" />
+        </EntityType>
+        <EntityType Name="URL">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="LongURL" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="ShortURL" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ClientCount" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Clients" Relationship="Self.ClientURL" FromRole="URL" ToRole="Client" />
+        </EntityType>
+        <EntityType Name="VWClientPackage">
+          <Key>
+            <PropertyRef Name="ClientId" />
+            <PropertyRef Name="Name" />
+            <PropertyRef Name="LoginId" />
+            <PropertyRef Name="PackageTitle" />
+            <PropertyRef Name="PackageType" />
+          </Key>
+          <Property Name="ClientId" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="LoginId" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="PackageTitle" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="PackageType" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="VWClientURL">
+          <Key>
+            <PropertyRef Name="Name" />
+            <PropertyRef Name="ClientId" />
+            <PropertyRef Name="LongURL" />
+            <PropertyRef Name="LoginId" />
+            <PropertyRef Name="UrlId" />
+            <PropertyRef Name="ClientCount" />
+          </Key>
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="ClientId" Type="Int32" Nullable="false" />
+          <Property Name="LongURL" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="ShortURL" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="LoginId" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="UrlId" Type="Int32" Nullable="false" />
+          <Property Name="ClientCount" Type="Int32" Nullable="false" />
+        </EntityType>
+        <Association Name="ClientURL">
+          <End Role="Client" Type="Self.Client" Multiplicity="*" />
+          <End Role="URL" Type="Self.URL" Multiplicity="*" />
+        </Association>
+        <Association Name="Subscriptions">
+          <End Role="Client" Type="Self.Client" Multiplicity="*" />
+          <End Role="Package" Type="Self.Package" Multiplicity="*" />
+        </Association>
+        <EntityContainer Name="NintexUrlDbEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Clients" EntityType="Self.Client" />
+          <EntitySet Name="Packages" EntityType="Self.Package" />
+          <EntitySet Name="URLs" EntityType="Self.URL" />
+          <EntitySet Name="VWClientPackages" EntityType="Self.VWClientPackage" />
+          <EntitySet Name="VWClientURLs" EntityType="Self.VWClientURL" />
+          <AssociationSet Name="ClientURL" Association="Self.ClientURL">
+            <End Role="Client" EntitySet="Clients" />
+            <End Role="URL" EntitySet="URLs" />
+          </AssociationSet>
+          <AssociationSet Name="Subscriptions" Association="Self.Subscriptions">
+            <End Role="Client" EntitySet="Clients" />
+            <End Role="Package" EntitySet="Packages" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="NintexUrlDbModelStoreContainer" CdmEntityContainer="NintexUrlDbEntities">
+          <EntitySetMapping Name="Clients">
+            <EntityTypeMapping TypeName="NintexUrlDbModel.Client">
+              <MappingFragment StoreEntitySet="Client">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="LoginId" ColumnName="LoginId" />
+                <ScalarProperty Name="PasswordHash" ColumnName="PasswordHash" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Packages">
+            <EntityTypeMapping TypeName="NintexUrlDbModel.Package">
+              <MappingFragment StoreEntitySet="Package">
+                <ScalarProperty Name="Active" ColumnName="Active" />
+                <ScalarProperty Name="Charges" ColumnName="Charges" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="URLs">
+            <EntityTypeMapping TypeName="NintexUrlDbModel.URL">
+              <MappingFragment StoreEntitySet="URL">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="LongURL" ColumnName="LongURL" />
+                <ScalarProperty Name="ShortURL" ColumnName="ShortURL" />
+                <ScalarProperty Name="ClientCount" ColumnName="ClientCount" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="VWClientPackages">
+            <EntityTypeMapping TypeName="NintexUrlDbModel.VWClientPackage">
+              <MappingFragment StoreEntitySet="VWClientPackages">
+                <ScalarProperty Name="ClientId" ColumnName="ClientId" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="LoginId" ColumnName="LoginId" />
+                <ScalarProperty Name="PackageTitle" ColumnName="PackageTitle" />
+                <ScalarProperty Name="PackageType" ColumnName="PackageType" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="VWClientURLs">
+            <EntityTypeMapping TypeName="NintexUrlDbModel.VWClientURL">
+              <MappingFragment StoreEntitySet="VWClientURLs">
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="ClientId" ColumnName="ClientId" />
+                <ScalarProperty Name="LongURL" ColumnName="LongURL" />
+                <ScalarProperty Name="ShortURL" ColumnName="ShortURL" />
+                <ScalarProperty Name="LoginId" ColumnName="LoginId" />
+                <ScalarProperty Name="UrlId" ColumnName="UrlId" />
+                <ScalarProperty Name="ClientCount" ColumnName="ClientCount" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <AssociationSetMapping Name="ClientURL" TypeName="NintexUrlDbModel.ClientURL" StoreEntitySet="ClientURL">
+            <EndProperty Name="Client">
+              <ScalarProperty Name="Id" ColumnName="ClientId" />
+            </EndProperty>
+            <EndProperty Name="URL">
+              <ScalarProperty Name="Id" ColumnName="UrlId" />
+            </EndProperty>
+          </AssociationSetMapping>
+          <AssociationSetMapping Name="Subscriptions" TypeName="NintexUrlDbModel.Subscriptions" StoreEntitySet="Subscriptions">
+            <EndProperty Name="Client">
+              <ScalarProperty Name="Id" ColumnName="ClientId" />
+            </EndProperty>
+            <EndProperty Name="Package">
+              <ScalarProperty Name="Id" ColumnName="PackageId" />
+            </EndProperty>
+          </AssociationSetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

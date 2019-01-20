@@ -1,0 +1,42 @@
+﻿@model Nintex.BusinessLayer.Client
+
+@{
+    ViewBag.Title = "Home Page";
+}
+
+
+
+@using (Html.BeginForm(FormMethod.Post))
+{
+    if (Model.IsAuthenticated == false)
+    {
+        @Html.Label("lbl1", "Existing Users...");
+        <br />
+        @Html.Label("lblLogin","Login ID");
+        <input type="text" name="loginId" />
+        <br/>
+        @Html.Label("lblPwd", "Password"); <input type="password" name="password" />
+        <input type="submit" value="Login" />
+    }
+}
+
+<br/>
+<br />
+
+
+@using (Html.BeginForm("Register", "Home", FormMethod.Post))
+{
+    if (Model.IsAuthenticated == false)
+    {
+        @Html.Label("lbl2", "Registration...");
+        <br />
+        @Html.Raw("Login ID");
+        <input type="text" name="loginId" />
+        <br />
+        @Html.Raw("Password"); <input type="password" name="password" />
+        <br />
+        @Html.Raw("Confirm Password"); <input type="password" name="confirmPassword" />
+
+        <input type="submit" value="Register" />
+    }
+}

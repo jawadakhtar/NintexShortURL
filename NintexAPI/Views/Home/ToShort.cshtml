@@ -1,0 +1,12 @@
+﻿@model NintexAPI.Models.APIModel
+
+@{
+    if (Model.URLFound == false)
+    {
+        @Html.Label("URL not found");
+    }
+    else if (Model.ShortURL != "")
+    {
+        @Html.Label(Model.ShortURL);
+    }
+}
