@@ -96,6 +96,10 @@
       <Project>{2465D7AC-0A1F-4D70-91F7-D53BF33F1E02}</Project>
       <Name>Nintex</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TestContext\TestContext.csproj">
+      <Project>{1e1463e1-a9c9-4b28-aa96-e7fac5d82a4d}</Project>
+      <Name>TestContext</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.

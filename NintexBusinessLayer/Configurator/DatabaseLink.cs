@@ -84,21 +84,8 @@ namespace Nintex.BusinessLayer.Configurator
                 throw new ApplicationException("The ConnectionString "+ ConnectionStringKey + " is missing from the Configuration.");
             }
 
-            //connectionStringsSection.ConnectionStrings[1].ConnectionString = DataAccessLayer.DBConfiguration.ConfiguredInstance().GetConnection().ConnectionString;
             aConfiguration.Save();
             ConfigurationManager.RefreshSection("connectionStrings");
-
-            //string appPath = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
-            //string configFile = System.IO.Path.Combine(appPath, "App.config");
-            //System.Configuration.ExeConfigurationFileMap configFileMap = new System.Configuration.ExeConfigurationFileMap();
-            //configFileMap.ExeConfigFilename = configFile;
-            //System.Configuration.Configuration config = 
-            //    System.Configuration.ConfigurationManager.OpenMappedExeConfiguration
-            //    (configFileMap, System.Configuration.ConfigurationUserLevel.None);
-
-            ////config.AppSettings.Settings["YourThing"].Value = "New Value";
-            //config.ConnectionStrings[0] = DataAccessLayer.DBConfiguration.ConfiguredInstance().GetConnection().ConnectionString;
-            //config.Save(); 
         }
     }
 }

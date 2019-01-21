@@ -27,6 +27,8 @@
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.ShortURL)
+            <br/>
+            @Html.Label("https://nintexshorturl.azurewebsites.net/" + @item.ShortURL);
         </td>
         <td>
             @Html.ActionLink("Delete", "Delete", new { id=item.Id })

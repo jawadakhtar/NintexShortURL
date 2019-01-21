@@ -6,34 +6,32 @@ using System.Web;
 
 namespace Nintex.BusinessLayer
 {
+    /// <summary>
+    /// A business entity for Client
+    /// </summary>
     public class Client : BusinessEntities
     {
-        private NintexIdentity m_Identity;
         public string Name { get; set; }
         public string LoginId { get; set; }
         public string Password { get; set; }
-
         public bool IsAuthenticated { get; set; }
-
-        public IIdentity Identity
-        {
-            get
-            {
-                return m_Identity;
-            }
-        }
         public List<Subscription> Subscriptions { get; set; }
-
         public List<URL> URLs { get; set; }
 
+        /// <summary>
+        /// A ctor to initialize the Client
+        /// </summary>
         public Client()
         {
-            m_Identity = new NintexIdentity(this);
             IsAuthenticated = false;
             Subscriptions = new List<Subscription>();
             URLs = new List<URL>();
         }
 
+        /// <summary>
+        /// Authenticates the Client against LoginId and Password
+        /// </summary>
+        /// <returns></returns>
         public bool Login()
         {
             try
@@ -57,8 +55,25 @@ namespace Nintex.BusinessLayer
             return true;
         }
 
+        /// <summary>
+        /// Returns the client having provided LoginId and Password
+        /// </summary>
+        /// <param name="aLoginId"></param>
+        /// <param name="aPassword"></param>
+        /// <returns></returns>
         public static Client GetClient(string aLoginId, string aPassword)
         {
+            //in case of unit-testing
+            if (Nintex.TestContext.IsTesting == true)
+            {
+                return new Client
+                {
+                    Id = 1,
+                    LoginId = aLoginId,
+                    Name = aLoginId
+                };
+            }
+
             Client client = new Client();
             string pwd = Security.HashPassword(aPassword);
             Nintex.DataLayer.NintexUrlDbEntities db = new DataLayer.NintexUrlDbEntities();
@@ -73,8 +88,18 @@ namespace Nintex.BusinessLayer
             return client;
         }
 
+        /// <summary>
+        /// Adds the Client in repository
+        /// </summary>
         private new void Add()
         {
+            //in case of unit-testing
+            if (Nintex.TestContext.IsTesting == true)
+            {
+                this.Id = 1;
+                return;
+            }
+
             DataLayer.Client newClient = new DataLayer.Client();
             newClient.Name = this.LoginId;
             newClient.LoginId = this.LoginId;
@@ -84,9 +109,13 @@ namespace Nintex.BusinessLayer
             db.Clients.Add(newClient);
             //db.Entry(newClient);
             db.SaveChanges();
-            this.IsAuthenticated = true;            
+
+            this.Id = newClient.Id;
         }
 
+        /// <summary>
+        /// Registers the New Client if it doesn't already exist
+        /// </summary>
         public void Register()
         {
             //CF-1: Check existing client
@@ -102,7 +131,7 @@ namespace Nintex.BusinessLayer
                 //ignoring the exception 
             }
 
-            if (IsAuthenticated == true || clientExist == true)
+            if (IsAuthenticated == true || clientExist == true && Nintex.TestContext.IsTesting == false)
             {
                 Password = "";
                 throw new ApplicationException("User already registered");
@@ -126,12 +155,24 @@ namespace Nintex.BusinessLayer
             {
                 this.Password = null;
             }
+
+            this.IsAuthenticated = true;
         }
 
+        /// <summary>
+        /// Get the URLs added by the Client
+        /// </summary>
         public void GetURLs()
         {
-            Nintex.DataLayer.Client dbClient = new DataLayer.Client { Id = this.Id };
             URLs.Clear();
+
+            if(Nintex.TestContext.IsTesting == true)
+            {
+                URLs.Add(new URL { Id = 1, LongURL = "www.google.com", ShortURL = "TEST" });
+                return;
+            }
+
+            Nintex.DataLayer.Client dbClient = new DataLayer.Client { Id = this.Id };
             try
             {
                 DataLayer.NintexUrlDbEntities db = new DataLayer.NintexUrlDbEntities();
@@ -150,6 +191,10 @@ namespace Nintex.BusinessLayer
             }
         }
 
+        /// <summary>
+        /// Initializes the Subcriptions
+        /// </summary>
+        /// <returns></returns>
         public List<Subscription> GetSubscriptions()
         {
             Subscriptions = new List<Subscription> { new Subscription { Client = this, Package = new Package { Id = 1, Charges = 1000, Type = Package.PackageType.Monthly }, SubscriptionDate = DateTime.Now.AddDays(-20) },

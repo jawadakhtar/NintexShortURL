@@ -15,6 +15,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NintexAPI", "NintexAPI\Nint
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NintexAPI.Tests", "NintexAPI.Tests\NintexAPI.Tests.csproj", "{653EC114-43B8-4ECD-A527-B738FFAA7AA1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestContext", "TestContext\TestContext.csproj", "{1E1463E1-A9C9-4B28-AA96-E7FAC5D82A4D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NintexBusinessLayerTest", "NintexBusinessLayerTest\NintexBusinessLayerTest.csproj", "{B112E73F-E5F2-4EA8-B52E-F048207FD272}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +49,14 @@ Global
 		{653EC114-43B8-4ECD-A527-B738FFAA7AA1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{653EC114-43B8-4ECD-A527-B738FFAA7AA1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{653EC114-43B8-4ECD-A527-B738FFAA7AA1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1E1463E1-A9C9-4B28-AA96-E7FAC5D82A4D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1E1463E1-A9C9-4B28-AA96-E7FAC5D82A4D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1E1463E1-A9C9-4B28-AA96-E7FAC5D82A4D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1E1463E1-A9C9-4B28-AA96-E7FAC5D82A4D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B112E73F-E5F2-4EA8-B52E-F048207FD272}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B112E73F-E5F2-4EA8-B52E-F048207FD272}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B112E73F-E5F2-4EA8-B52E-F048207FD272}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B112E73F-E5F2-4EA8-B52E-F048207FD272}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

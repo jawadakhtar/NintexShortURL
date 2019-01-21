@@ -12,6 +12,12 @@ namespace Nintex.Tests.Controllers
     [TestClass]
     public class HomeControllerTest
     {
+        static HomeControllerTest()
+        {
+            Nintex.TestContext.IsTesting = true;
+        }
+
+
         [TestMethod]
         public void Index()
         {
@@ -35,7 +41,7 @@ namespace Nintex.Tests.Controllers
             ViewResult result = controller.About() as ViewResult;
 
             // Assert
-            Assert.AreEqual("Your application description page.", result.ViewBag.Message);
+            Assert.AreEqual("This is Nintex Test Application.", result.ViewBag.Message);
         }
 
         [TestMethod]
@@ -49,6 +55,23 @@ namespace Nintex.Tests.Controllers
 
             // Assert
             Assert.IsNotNull(result);
+            Assert.AreEqual("Jawad Mohsin Akhtar.", result.ViewBag.Message);
+        }
+
+        [TestMethod]
+        public void Register()
+        {
+            HomeController controller = new HomeController();
+
+            var registerResult = controller.Register("test", "test", "test") as ViewResult;
+            // Assert
+            Assert.IsNotNull(registerResult);
+            Assert.IsNotNull(registerResult.Model);
+
+
+            ActionResult loginResult = controller.Index("test", "test") as ActionResult;
+
+            Assert.IsNotNull(loginResult);
         }
     }
 }

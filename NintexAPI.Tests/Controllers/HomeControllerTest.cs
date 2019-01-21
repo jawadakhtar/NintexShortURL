@@ -8,6 +8,11 @@ namespace NintexAPI.Tests.Controllers
     [TestClass]
     public class HomeControllerTest
     {
+        static HomeControllerTest()
+        {
+            Nintex.TestContext.IsTesting = true;
+        }
+    
         [TestMethod]
         public void Index()
         {
@@ -15,11 +20,29 @@ namespace NintexAPI.Tests.Controllers
             HomeController controller = new HomeController();
 
             // Act
-            ViewResult result = controller.Index("") as ViewResult;
+            RedirectResult result = controller.Index("TEST") as RedirectResult;
 
             // Assert
             Assert.IsNotNull(result);
-            Assert.AreEqual("Home Page", result.ViewBag.Title);
+            Assert.IsFalse(string.IsNullOrEmpty(result.Url));
+        }
+
+        [TestMethod]
+        public void ToShort()
+        {
+            // Arrange
+            HomeController controller = new HomeController();
+
+            // Act
+            ViewResult result = controller.ToShort("www.google.com") as ViewResult;
+            var model = result.Model as NintexAPI.Models.APIModel;
+            
+            // Assert
+            Assert.IsNotNull(result);
+            Assert.IsNotNull(model);
+            Assert.IsFalse(string.IsNullOrEmpty(model.ShortURL));
+
+
         }
     }
 }

@@ -5,6 +5,9 @@ using System.Web;
 
 namespace Nintex.BusinessLayer
 {
+    /// <summary>
+    /// Defines the purchase of Packages by the Client
+    /// </summary>
     public class Subscription : BusinessEntities
     {
         public Client Client { get; set; }

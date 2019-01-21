@@ -8,6 +8,7 @@ namespace Nintex.Controllers
 {
     public class URLController : Controller
     {
+        //The Client object to track the current login user
         BusinessLayer.Client m_Client;
 
         public URLController()
@@ -17,17 +18,14 @@ namespace Nintex.Controllers
             m_Client = (BusinessLayer.Client)System.Web.HttpContext.Current.Session["CurrentUser"];
         }
 
-        // GET: URL
+        /// <summary>
+        /// Action to show the Clients URL
+        /// </summary>
+        /// <returns></returns>
         public ActionResult Index()
         {
             m_Client.GetURLs();
             return View(m_Client.URLs);
-        }
-
-        // GET: URL/Details/5
-        public ActionResult Details(int id)
-        {
-            return View();
         }
 
         // GET: URL/Create
@@ -37,6 +35,11 @@ namespace Nintex.Controllers
         }
 
         // POST: URL/Create
+        /// <summary>
+        /// Creates the URL and generates the short URL
+        /// </summary>
+        /// <param name="url"></param>
+        /// <returns></returns>
         [HttpPost]
         public ActionResult Create(Nintex.BusinessLayer.URL url)
         {
@@ -53,29 +56,12 @@ namespace Nintex.Controllers
             }
         }
 
-        // GET: URL/Edit/5
-        public ActionResult Edit(int id)
-        {
-            return View();
-        }
-
-        // POST: URL/Edit/5
-        [HttpPost]
-        public ActionResult Edit(int id, FormCollection collection)
-        {
-            try
-            {
-                // TODO: Add update logic here
-
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
         // GET: URL/Delete/5
+        /// <summary>
+        /// Action to delete the URL
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public ActionResult Delete(int id)
         {
             BusinessLayer.URL url = new BusinessLayer.URL { Id = id };
@@ -86,13 +72,17 @@ namespace Nintex.Controllers
         }
 
         // POST: URL/Delete/5
+        /// <summary>
+        /// After deleting the URL, this Action redirects to Index
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="collection"></param>
+        /// <returns></returns>
         [HttpPost]
         public ActionResult Delete(int id, FormCollection collection)
         {
             try
             {
-                // TODO: Add delete logic here
-
                 return RedirectToAction("Index");
             }
             catch

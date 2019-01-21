@@ -10,6 +10,9 @@ using System.Data.EntityClient;
 
 namespace Nintex.DataLayer
 {
+    /// <summary>
+    /// A Class to configure the connection string 
+    /// </summary>
     public class DBConfiguration
     {
         private static DBConfiguration c_Self = null;
